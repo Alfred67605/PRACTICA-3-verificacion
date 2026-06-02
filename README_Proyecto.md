@@ -90,11 +90,6 @@ La práctica tiene como objetivo **diseñar e implementar pruebas avanzadas de A
 
 ## Notas adicionales
 - Si prefieres usar una base de datos local sin Docker, crea una base `movies_db` en PostgreSQL y ajusta `.env` en consecuencia.
-- Para crear el **PDF** de la explicación, instala `md-to-pdf` y ejecuta:
-  ```bash
-  npm install -D md-to-pdf
-  npx md-to-pdf Explicacion_Practica3.md -o Explicacion_Practica3.pdf
-  ```
 - Los comandos anteriores pueden ejecutarse en cualquier terminal con permisos de escritura en la carpeta del proyecto.
 
 ---
