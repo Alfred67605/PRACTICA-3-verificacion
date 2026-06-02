@@ -176,3 +176,4 @@ test/
 | `npm run test:e2e`  | Ejecuta pruebas end-to-end                   |
 | `npm run lint`      | Ejecuta el linter con corrección automática  |
 | `npm run format`    | Formatea el código con Prettier              |
+# PRACTICA-3-verificacion

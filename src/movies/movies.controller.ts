@@ -9,6 +9,7 @@ import {
   ParseUUIDPipe,
   HttpCode,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -19,6 +20,7 @@ import {
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
+import { FilterMovieDto } from './dto/filter-movie.dto';
 import { Movie } from './entities/movie.entity';
 
 @ApiTags('movies')
@@ -37,8 +39,8 @@ export class MoviesController {
   @Get()
   @ApiOperation({ summary: 'Obtener todas las películas' })
   @ApiResponse({ status: 200, description: 'Lista de películas', type: [Movie] })
-  findAll(): Promise<Movie[]> {
-    return this.moviesService.findAll();
+  findAll(@Query() filterMovieDto: FilterMovieDto): Promise<Movie[]> {
+    return this.moviesService.findAll(filterMovieDto);
   }
 
   @Get(':id')

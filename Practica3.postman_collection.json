@@ -1,0 +1,637 @@
+{
+  "info": {
+    "name": "INF780 - Practica 3",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "idA",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "idB",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 Filtrado Query Params",
+      "item": [
+        {
+          "name": "P1-01 GET /movies?genre=sci-fi",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"All movies match the genre filter\", function () {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.be.an(\"array\");",
+                  "    if (body.length > 0) {",
+                  "        pm.expect(body.every(m => m.genre === \"sci-fi\")).to.be.true;",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/movies?genre=sci-fi",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "movies"
+              ],
+              "query": [
+                {
+                  "key": "genre",
+                  "value": "sci-fi"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "P1-02 GET /movies?genre=drama",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"All movies match the genre filter\", function () {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.be.an(\"array\");",
+                  "    if (body.length > 0) {",
+                  "        pm.expect(body.every(m => m.genre === \"drama\")).to.be.true;",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/movies?genre=drama",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "movies"
+              ],
+              "query": [
+                {
+                  "key": "genre",
+                  "value": "drama"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "P1-03 GET /movies?year=2010",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"All movies match the year filter\", function () {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.be.an(\"array\");",
+                  "    if (body.length > 0) {",
+                  "        pm.expect(body.every(m => m.year === 2010)).to.be.true;",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/movies?year=2010",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "movies"
+              ],
+              "query": [
+                {
+                  "key": "year",
+                  "value": "2010"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "P1-04 GET /movies?genre=sci-fi&year=2010",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"All movies match the genre and year filters\", function () {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.be.an(\"array\");",
+                  "    if (body.length > 0) {",
+                  "        pm.expect(body.every(m => m.genre === \"sci-fi\" && m.year === 2010)).to.be.true;",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/movies?genre=sci-fi&year=2010",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "movies"
+              ],
+              "query": [
+                {
+                  "key": "genre",
+                  "value": "sci-fi"
+                },
+                {
+                  "key": "year",
+                  "value": "2010"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "P1-05 GET /movies?genre=musical",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 'musical' is not a valid enum value so ValidationPipe throws 422",
+                  "pm.test(\"Status code is 422 o 200 ([] array vacio)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 422]);",
+                  "});",
+                  "pm.test(\"Explicacion del comportamiento real\", function () {",
+                  "    if (pm.response.code === 422) {",
+                  "        console.log('Se devolvio 422 porque \"musical\" no está en el Enum Genre de ValidationPipe');",
+                  "    } else {",
+                  "        console.log('Se devolvio 200 [] vacío porque no se aplicó validador de Enum estricto');",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/movies?genre=musical",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "movies"
+              ],
+              "query": [
+                {
+                  "key": "genre",
+                  "value": "musical"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "P1-06 GET /movies?year=1800",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 o 422\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 422]);",
+                  "});",
+                  "pm.test(\"Response is an empty array or Validation Error\", function () {",
+                  "    if (pm.response.code === 200) {",
+                  "        const body = pm.response.json();",
+                  "        pm.expect(body).to.be.an(\"array\").that.is.empty;",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/movies?year=1800",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "movies"
+              ],
+              "query": [
+                {
+                  "key": "year",
+                  "value": "1800"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "P1-07 GET /movies?rating=9",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"All movies match the rating filter\", function () {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.be.an(\"array\");",
+                  "    if (body.length > 0) {",
+                  "        pm.expect(body.every(m => parseFloat(m.rating) >= 9)).to.be.true;",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/movies?rating=9",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "movies"
+              ],
+              "query": [
+                {
+                  "key": "rating",
+                  "value": "9"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 Flujo Encadenado",
+      "item": [
+        {
+          "name": "P2-01 POST /movies",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "const body = pm.response.json();",
+                  "if(body && body.id) {",
+                  "    pm.collectionVariables.set(\"idA\", body.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Movie A\",\n  \"director\": \"Director A\",\n  \"genre\": \"sci-fi\",\n  \"year\": 2023,\n  \"rating\": 8.5\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/movies",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "movies"
+              ]
+            }
+          }
+        },
+        {
+          "name": "P2-02 POST /movies",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "const body = pm.response.json();",
+                  "if(body && body.id) {",
+                  "    pm.collectionVariables.set(\"idB\", body.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Movie B\",\n  \"director\": \"Director B\",\n  \"genre\": \"drama\",\n  \"year\": 2022,\n  \"rating\": 7.0\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/movies",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "movies"
+              ]
+            }
+          }
+        },
+        {
+          "name": "P2-03 GET /movies",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Ambas peliculas (A y B) estan presentes\", function () {",
+                  "    const body = pm.response.json();",
+                  "    const idA = pm.collectionVariables.get(\"idA\");",
+                  "    const idB = pm.collectionVariables.get(\"idB\");",
+                  "    ",
+                  "    const hasA = body.some(m => m.id === idA);",
+                  "    const hasB = body.some(m => m.id === idB);",
+                  "    ",
+                  "    pm.expect(hasA).to.be.true;",
+                  "    pm.expect(hasB).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/movies",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "movies"
+              ]
+            }
+          }
+        },
+        {
+          "name": "P2-04 PATCH /movies/{{idA}}",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Campos actualizados\", function () {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.title).to.eql(\"A Updated\");",
+                  "    pm.expect(parseFloat(body.rating)).to.eql(9.5);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"A Updated\",\n  \"rating\": 9.5\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/movies/{{idA}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "movies",
+                "{{idA}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "P2-05 GET /movies/{{idA}}",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Nuevos valores correctos\", function () {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.title).to.eql(\"A Updated\");",
+                  "    pm.expect(parseFloat(body.rating)).to.eql(9.5);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/movies/{{idA}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "movies",
+                "{{idA}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "P2-06 DELETE /movies/{{idA}}",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/movies/{{idA}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "movies",
+                "{{idA}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "P2-07 GET /movies/{{idA}}",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/movies/{{idA}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "movies",
+                "{{idA}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "P2-08 GET /movies",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"idB presente, idA ausente\", function () {",
+                  "    const body = pm.response.json();",
+                  "    const idA = pm.collectionVariables.get(\"idA\");",
+                  "    const idB = pm.collectionVariables.get(\"idB\");",
+                  "    ",
+                  "    const hasA = body.some(m => m.id === idA);",
+                  "    const hasB = body.some(m => m.id === idB);",
+                  "    ",
+                  "    pm.expect(hasA).to.be.false;",
+                  "    pm.expect(hasB).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/movies",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "movies"
+              ]
+            }
+          }
+        },
+        {
+          "name": "P2-09 DELETE /movies/{{idB}}",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/movies/{{idB}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "movies",
+                "{{idB}}"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Movie } from './entities/movie.entity';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
+import { FilterMovieDto } from './dto/filter-movie.dto';
 
 @Injectable()
 export class MoviesService {
@@ -17,8 +18,26 @@ export class MoviesService {
     return this.movieRepository.save(movie);
   }
 
-  async findAll(): Promise<Movie[]> {
-    return this.movieRepository.find();
+  async findAll(filterMovieDto?: FilterMovieDto): Promise<Movie[]> {
+    const query = this.movieRepository.createQueryBuilder('movie');
+
+    if (filterMovieDto) {
+      const { genre, year, rating } = filterMovieDto;
+
+      if (genre) {
+        query.andWhere('movie.genre = :genre', { genre });
+      }
+
+      if (year) {
+        query.andWhere('movie.year = :year', { year });
+      }
+
+      if (rating) {
+        query.andWhere('movie.rating >= :rating', { rating });
+      }
+    }
+
+    return query.getMany();
   }
 
   async findOne(id: string): Promise<Movie> {
